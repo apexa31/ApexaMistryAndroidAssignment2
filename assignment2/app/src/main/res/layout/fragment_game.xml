@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="gameViewModel"
+            type="com.example.assignment2.screens.game.GameViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/game_img"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/game_image_size"
+            android:scaleType="centerCrop"
+            android:src="@drawable/rnm02"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/game_img"
+            app:layout_constraintBottom_toTopOf="@id/radioGroup">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/question"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/horizontal_margin"
+                    android:layout_marginVertical="@dimen/vertical_margin"
+                    android:text="@{context.getText(gameViewModel.question)}"
+                    android:textSize="@dimen/about_text_size"
+                    android:textColor="@color/teal_700"/>
+
+                <ImageView
+                    android:id="@+id/correct"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="top"
+                    android:src="@drawable/right_24"
+                    android:visibility="@{gameViewModel.attempted &amp;&amp; gameViewModel.ansCorrect ? View.VISIBLE : View.GONE}"/>
+
+                <ImageView
+                    android:id="@+id/wrong"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="top"
+                    android:src="@drawable/wrong_24"
+                    android:visibility="@{gameViewModel.attempted &amp;&amp; !gameViewModel.ansCorrect ? View.VISIBLE : View.GONE}"/>
+
+            </FrameLayout>
+
+        </ScrollView>
+
+        <ImageButton
+            android:id="@+id/prevBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_navigate_before_24"
+            app:layout_constraintBottom_toTopOf="@id/score"
+            app:layout_constraintEnd_toStartOf="@id/radioGroup"
+            android:onClick="@{() -> gameViewModel.prevQuestion()}"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/score"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/trueRBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TRUE"
+                android:checked="@{gameViewModel.selectTrue}"
+                android:enabled="@{!gameViewModel.attempted}"
+                android:onClick="@{() -> gameViewModel.onChecked(true)}"/>
+
+            <RadioButton
+                android:id="@+id/falseRBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FALSE"
+                android:checked="@{gameViewModel.selectFalse}"
+                android:enabled="@{!gameViewModel.attempted}"
+                android:onClick="@{() -> gameViewModel.onChecked(false)}"/>
+
+        </RadioGroup>
+
+        <ImageButton
+            android:id="@+id/nextBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_navigate_next_24"
+            app:layout_constraintBottom_toTopOf="@id/score"
+            app:layout_constraintStart_toEndOf="@id/radioGroup"
+            android:onClick="@{() -> gameViewModel.nextQuestion()}"/>
+
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{gameViewModel.scoreStr}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
